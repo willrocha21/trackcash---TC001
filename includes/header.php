@@ -11,16 +11,22 @@
 
 //Conexões com o DB após submeter formulário, apenas via POST.
 if($_SERVER["REQUEST_METHOD"] === "POST"){
-	//Inclue conexão DB pela class PDO
-	include_once('db.php');
-	//Produz uma variável global para todo o projeto
-	global $DB;
-	//Instancia a classe de Conexao com o servidor.
-	$DB = Conexao::getInstance();
-	dump($DB);
+	// Antes de Instanciar o banco de dados para ter a certeza que a tokenização está de acordo.
+	if(verifyFormToken($nameForm) === true){ //Função em /includes/functions.php
+		//Inclue conexão DB pela class PDO
+		include_once('db.php');
+		//Produz uma variável global para todo o projeto
+		global $DB;
+		//Instancia a classe de Conexao com o servidor.
+		$DB = Conexao::getInstance();
+		dump($DB);
+	}else{
+		// Se chegamos até aqui é porque algo de errado foi feito no formulário para quebrar o token.
+		// Neste caso podemos emitir um relatório de erro para salvar em um log, ou enviar todos os dados por e-mail para o administrador.
+		// Para não dar retorno positivo para o invasor vamos apenas redirecionar para a página de cadastro.
+		header('Location:cadastro.php');
+		exit();
+	}
 
-}else{ //Outros métodos indesejados vão ser redirecionado para a página de cadastro novamente, mas não vamos exibir erros para o invasor não ter retorno positivo de qualquer tentativa
-	header('Location:cadastro.php');
-	exit();
 }
 ?>

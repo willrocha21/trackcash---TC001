@@ -1,5 +1,9 @@
 <?php 
 	include_once('includes/header.php');
+	global $nameForm;
+	$nameForm = 'cadastroClientes';
+	$token = gerarTokenParaForms($nameForm);
+	dump($token);
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -38,10 +42,10 @@
 					</div>	
 					<div class="row">
 						<div class="centerElement col-xs-12 col-sm-12 col-md-6 col-lg-7">
-							<!-- 
-								Vamos adicionar ao action a função htmlentities() recebendo a variável global PHP_SELF. Como o cadastro é aberto a qualquer usuário da internet, com esta função qualquer tentativa de ataque XSS é derrubada.
-							-->
-							<form name="cadastroClientes" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+							<?php 
+								//Vamos adicionar ao action a função htmlentities() recebendo a variável global PHP_SELF. Como o cadastro é aberto a qualquer usuário da internet, com esta função qualquer tentativa de ataque XSS é derrubada.
+							?>
+							<form name="<?php echo $nameForm;?>" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
 							  <div class="form-group">
 							    <input type="text" name="cpfCnpj" class="form-control" id="cpfCnpj" placeholder="CPF/CNPJ" onkeyup="mascarar(this);">
 							  </div>
@@ -50,6 +54,7 @@
 							  </div>							  								
 							  <div class="form-group">
 							    <input type="email" class="form-control" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Email">
+							    <input name="token" type="hidden" value="<?php echo $token;?>">
 							  </div>
 							  <div class="form-group">
 							    <input type="tel" class="form-control" id="telefone" placeholder="Telefone" onkeyup="mascarar(this);">
@@ -77,7 +82,21 @@
 	    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>	
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	    <script>
+	    	$(document).ready(function(){
+	    		e = $.Event('keyup'); e.keyCode= 13;
+	    		setTimeout(function(){
+	    			$('#cpfCnpj').focus().val('<?php echo rand(10000000000,99999999999);?>');
+	    			$('#cpfCnpj').trigger(e);
+	    		},500);
+	    		$('#telefone').val('(12) 9876-65412');
+	    		$('#nome').val('Ludwig Van Beethoven');
+	    		$('#email').val('lvb@compositor.com.br');
+	    		$('#senha').val('123456789');
+	    		$('#senhaConfirme').val($('#senha').val());
+	    	});
+	    </script>	
 	</body>
 <?php 
 	include_once('includes/footer.php');
