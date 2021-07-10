@@ -1,3 +1,7 @@
+<?php 
+	include_once('includes/header.php');
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 	<head>
@@ -10,6 +14,7 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet"> 
 		<link rel="stylesheet" href="css/estilo.css">
+		<script src="js/j.js"></script>	
 	</head>
 	<body>
 		<div class="container-fluid padding-main">
@@ -36,7 +41,7 @@
 						<div class="centerElement col-xs-12 col-sm-12 col-md-6 col-lg-7">
 							<form action="" method="post">
 							  <div class="form-group">
-							    <input type="text" name="cpfCnpj" class="form-control" id="cpfCnpj" placeholder="CPF/CNPJ">
+							    <input type="text" name="cpfCnpj" class="form-control" id="cpfCnpj" placeholder="CPF/CNPJ" onkeyup="mascarar(this);">
 							  </div>
 							  <div class="form-group">
 							    <input type="text" name="nome" class="form-control" id="nome" placeholder="Nome">
@@ -45,10 +50,10 @@
 							    <input type="email" class="form-control" id="email" placeholder="Email">
 							  </div>
 							  <div class="form-group">
-							    <input type="tel" class="form-control" id="telefone" placeholder="Telefone">
+							    <input type="tel" class="form-control" id="telefone" placeholder="Telefone" onkeyup="mascarar(this);">
 							  </div>							  
 							  <div class="form-group">
-							    <input type="password" class="form-control" id="senha" placeholder="Senha">
+							    <input type="password" class="form-control" id="senha" placeholder="Senha" pattern=".{8,}" title="Para mais segurança digite no mínimo 8 caracteres">
 							  </div>
 							  <div class="form-group">
 							    <input type="password" class="form-control" id="senhaConfirme" placeholder="Confirme sua senha">
