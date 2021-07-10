@@ -1,6 +1,9 @@
 <?php
 if(isset($DB)){
 	//Elimina a instancia do banco de dados.
-	$DB::close();
+	unset($DB);
+}
+if(isset($_SESSION['warning'])){
+	unset($_SESSION['warning']);
 }
 ?>

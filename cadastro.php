@@ -1,9 +1,6 @@
 <?php 
 	include_once('includes/header.php');
-	global $nameForm;
-	$nameForm = 'cadastroClientes';
 	$token = gerarTokenParaForms($nameForm);
-	dump($token);
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -20,7 +17,17 @@
 		<script src="js/j.js"></script>	
 	</head>
 	<body>
+
+
+
 		<div class="container-fluid padding-main">
+			<?php
+				// Buscamos se retornou algum erro na validação dos dados do formulário
+				if(isset($_SESSION['warning']) && $_SESSION['warning'] !== false){
+					//Exibimos uma mensagem logo acima.
+					echo '<div class="alert alert-danger" role="alert">'.$_SESSION['warning'].'</div>';
+				}
+			?>
 			<div class="row">
 				<div class="callFrame col-xs-12 col-sm-12 col-md-6 col-lg-6">
 					<img class="callFrameImg" src="/images/scott-graham-5fNmWej4tAA-unsplash1.jpg" alt="">
@@ -53,19 +60,19 @@
 							    <input type="text" name="nome" class="form-control" id="nome" placeholder="Nome">
 							  </div>							  								
 							  <div class="form-group">
-							    <input type="email" class="form-control" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Email">
+							    <input type="email" name="email" class="form-control" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Email">
 							    <input name="token" type="hidden" value="<?php echo $token;?>">
 							  </div>
 							  <div class="form-group">
-							    <input type="tel" class="form-control" id="telefone" placeholder="Telefone" onkeyup="mascarar(this);">
+							    <input type="tel" name="telefone" class="form-control" id="telefone" placeholder="Telefone" onkeyup="mascarar(this);">
 							  </div>							  
 							  <div class="form-group">
-							    <input type="password" class="form-control" id="senha" placeholder="Senha" pattern=".{8,}" title="Para mais segurança digite no mínimo 8 caracteres">
+							    <input type="password" name="password" class="form-control" id="senha" placeholder="Senha" pattern=".{8,}" title="Para mais segurança digite no mínimo 8 caracteres">
 							  </div>
 							  <div class="form-group">
-							    <input type="password" class="form-control" id="senhaConfirme" placeholder="Confirme sua senha">
+							    <input type="password" name="passwordVerify" class="form-control" id="senhaConfirme" placeholder="Confirme sua senha">
 							  </div>							  
-							  <button type="submit" name="cadastrar" class="btn btn-primary w-100">Acessar o Sistema</button>
+							  <button type="submit" name="cadastrar" value="true" class="btn btn-primary w-100">Acessar o Sistema</button>
 							</form>
 						</div>
 					</div>

@@ -16,8 +16,6 @@ class Conexao extends \PDO{
 		if(!isset(self::$instance)){
 			try{
 				self::$instance = new \PDO(self::$dbType . ':host=' . self::$host . ';dbname=' . self::$db.';charset=utf8', self::$user, self::$senha, array(\PDO::ATTR_PERSISTENT => self::$persistent, \PDO::MYSQL_ATTR_INIT_COMMAND => self::$charSet));
-				//self::$instance->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-				//dump(self::$persistent);
 			}catch(\PDOException $ex){
 				exit("Erro ao conectar com o banco de dados: " . $ex->getMessage());
 			}
