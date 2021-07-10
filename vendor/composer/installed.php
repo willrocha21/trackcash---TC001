@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'reference' => '18b90a849bd90c6ecbb74f66b28c20423c8f8117',
+        'name' => '__root__',
+        'dev' => true,
+    ),
+    'versions' => array(
+        '__root__' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'reference' => '18b90a849bd90c6ecbb74f66b28c20423c8f8117',
+            'dev_requirement' => false,
+        ),
+        'symfony/polyfill-mbstring' => array(
+            'pretty_version' => 'v1.19.0',
+            'version' => '1.19.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/polyfill-mbstring',
+            'aliases' => array(),
+            'reference' => 'b5f7b932ee6fa802fc792eabd77c4c88084517ce',
+            'dev_requirement' => false,
+        ),
+        'symfony/var-dumper' => array(
+            'pretty_version' => 'v3.4.47',
+            'version' => '3.4.47.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/var-dumper',
+            'aliases' => array(),
+            'reference' => '0719f6cf4633a38b2c1585140998579ce23b4b7d',
+            'dev_requirement' => false,
+        ),
+    ),
+);

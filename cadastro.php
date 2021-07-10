@@ -1,7 +1,6 @@
 <?php 
 	include_once('includes/header.php');
 ?>
-
 <!DOCTYPE html>
 <html lang="pt">
 	<head>
@@ -39,7 +38,10 @@
 					</div>	
 					<div class="row">
 						<div class="centerElement col-xs-12 col-sm-12 col-md-6 col-lg-7">
-							<form action="" method="post">
+							<!-- 
+								Vamos adicionar ao action a função htmlentities() recebendo a variável global PHP_SELF. Como o cadastro é aberto a qualquer usuário da internet, com esta função qualquer tentativa de ataque XSS é derrubada.
+							-->
+							<form name="cadastroClientes" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
 							  <div class="form-group">
 							    <input type="text" name="cpfCnpj" class="form-control" id="cpfCnpj" placeholder="CPF/CNPJ" onkeyup="mascarar(this);">
 							  </div>
@@ -47,7 +49,7 @@
 							    <input type="text" name="nome" class="form-control" id="nome" placeholder="Nome">
 							  </div>							  								
 							  <div class="form-group">
-							    <input type="email" class="form-control" id="email" placeholder="Email">
+							    <input type="email" class="form-control" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Email">
 							  </div>
 							  <div class="form-group">
 							    <input type="tel" class="form-control" id="telefone" placeholder="Telefone" onkeyup="mascarar(this);">
@@ -58,7 +60,7 @@
 							  <div class="form-group">
 							    <input type="password" class="form-control" id="senhaConfirme" placeholder="Confirme sua senha">
 							  </div>							  
-							  <button type="submit" class="btn btn-primary w-100">Acessar o Sistema</button>
+							  <button type="submit" name="cadastrar" class="btn btn-primary w-100">Acessar o Sistema</button>
 							</form>
 						</div>
 					</div>
@@ -77,5 +79,7 @@
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>	
 	</body>
-
+<?php 
+	include_once('includes/footer.php');
+?>
 </html>
