@@ -1,0 +1,72 @@
+body{
+	background-color: #E5E5E5;
+	color: #FFFFFF;
+}
+.grayBg{
+	background-color: #E5E5E5;
+}
+.callFrame{
+	background-color: #C94A21;
+	text-align: center;
+	vertical-align: middle;
+	border-radius: 14px 0px 0px 14px;
+	box-shadow: 0px 0px 14px 7px rgba(0, 0, 0, 0.25);
+	padding: 5%;
+	position: relative;
+	overflow: hidden;
+}
+.callFrameImg{
+	opacity: 0.1;
+  	position: absolute;
+  	left: 0;
+  	top: 0;
+  	width: 100%;
+  	height: auto;
+}
+.callFrame h1, .callFrame p, .actionForm h2{
+	font-family: 'Ubuntu', sans-serif;
+	position: relative;
+}
+.callFrame h1{
+	font-weight: 700;
+}
+.callFrame p{
+	font-weight: 400;
+}
+.actionForm{
+	border-radius: 0 0.5em 0.5em 0;
+	background-color: #FFFFFF;
+	box-shadow: 0px 0px 14px 7px rgba(0, 0, 0, 0.25);
+	text-align: center;
+	padding: 44px 0px;
+}
+.actionForm h2{
+	font-weight: 500;
+	font-size:  20px;	
+	color: #C94A21;
+	line-height: 40px;
+}
+.actionForm input.form-control{
+	background-color: #E5E5E5 !important;
+	border-color: #E5E5E5 !important;
+	color: #6D6D6D !important;
+}
+.actionForm a{
+	line-height: 60px;
+}
+a:link, a:active, a:visited{
+	color: #C94A21;
+}
+.padding-main{
+	padding: 80px 140px;
+}
+.borda{
+	border:  1px solid black !important;
+}
+.centerElement{
+	margin: auto;
+}
+.btn-primary{
+	background-color: #C94A21 !important;
+	border-color: #C94A21 !important;
+}
