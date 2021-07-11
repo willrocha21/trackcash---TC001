@@ -27,7 +27,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 		include_once('class/TrackCash.php');
 		// Chama o método Cadastrar() sendo o primeiro parametro a rota dentro do método e o segundo com o array com os dados enviados.
 		$cadastrar = TrackCash::Cadastrar('NovoUsuario',$_POST);
-		dump($cadastrar);
+		
+		//dump($cadastrar);
 
 	}else{
 		// Se chegamos até aqui é porque algo de errado foi feito no formulário para quebrar o token.
