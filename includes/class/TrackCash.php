@@ -33,30 +33,35 @@ class TrackCash
 					if(self::validarParametros($dados) === true){
 						// Vamos validar a qualidade dos dados.
 					if(self::validarDados($dados) === true){
-						dump('Dados validados!');
 						// Dados validados, agora vamos tratar os dados para inserção no DB
 						if(self::tratarDados() === true){
 							//Até aqui conseguimos saber que o usuário é honesto e está bem intensionado, MAS, vamos validar o dado para ver se não foi inserido dados maliciosos, scripts, sql inject.
 
 							// Vamos verificar se o cliente já não existe na base de dados.
-							$s = $DB->query("SHOW tables");
-							dump($s->fetchAll(PDO::FETCH_OBJ));
+							//$s = $DB->query("SHOW COLUMNS FROM usuarios");
+							//$r = $s->fetchAll(PDO::FETCH_OBJ);
+
+							if(self::clienteExiste(self::$dadosRecebidos['email']) === false){
+								// Ufa! Enfim vamos cadastrar este bendito!
+								
+								if(self::cadastrarCliente() === true){
+									// Cliente cadastrado com sucesso!
+									return true;
+								}else{
+									self::setWarning('Alguma falha ocorreu no processamento de seu cadastro. Entre em contato com nossa equipe.');
+								}
+								
+							}else{ // Cliente já existe na base, então vamos encaminhar ele para o login.
+								self::setWarning('Cliente já cadastrado em nossa empresa. <a href="login.php">Clique aqui</a> para logar.');
+							}							
 						}
 					}else{ // Se algum dado errado vamos retornar false.
 						return false;
 					}
-
-
-					//dump($DB);
-
-
-
 				}else{
 					// Se chegamos aqui é porque foi encontrado algum dado extra passado por algum invasor, nestes caso para encaminhar para a página principal.
 					self::vazaPilantra();
 				}
-
-
 			break;
 			case 'RemoveUsuario': // Remoção de usuários
 				// code...
@@ -70,6 +75,41 @@ class TrackCash
 		}
 		return $dados;
 	}
+	protected static function cadastrarCliente(){
+		global $DB;
+		try{
+			$sql = "INSERT INTO usuarios(nome,email,telefone,senha,cpf) VALUES (:nome,:email,:telefone,:senha,:cpf);";
+			$q = $DB->prepare($sql);
+			$i = $q->execute(
+				array(
+					':nome' => self::$dadosRecebidos['nome'],					
+					':email' => self::$dadosRecebidos['email'],					
+					':telefone' => self::$dadosRecebidos['telefone'],					
+					':senha' => self::$dadosRecebidos['passwordVerify'],					
+					':cpf' => self::$dadosRecebidos['cpfCnpj']
+				)
+			);
+		}catch(PDOException $e){
+			dump($e->getMessage());
+		}
+		
+		if($q->rowCount() > 0){
+			return true;
+		}
+		return false;
+	}
+	protected static function clienteExiste($email){
+		global $DB;
+		$sql = "SELECT u.email FROM usuarios u WHERE u.email = :email;";
+		$q = $DB->prepare($sql);
+		$q->bindParam(':email',$email);
+		$q->execute();
+		if($q->rowCount() > 0){ //Cliente já existe 
+			return true; 
+		}
+		return false; // Cliente não existe, porque a contagem de linhas até aqui foi 0.
+	}	
+
 	private static function validarParametros(array $dados){
 		foreach ($dados as $k => $v){
 			// Se encontrar algum parâmetro fora do esperado retorna false. Houve tentativa de inserção de dados extras no formulário.
@@ -147,6 +187,9 @@ class TrackCash
 			// Já vamos remover tags HTML.
 			self::$dadosRecebidos[$k] = strip_tags($v);
 			//Vamos formatar o nome para evitar JoAO FRANcisCo ou emails com letras maíusculas
+			if($k === 'passwordVerify'){
+				self::$dadosRecebidos[$k] = encriptarSenhas($v);
+			}
 		}
 		self::$dadosRecebidos['nome'] = filtroNomeProprio(self::$dadosRecebidos['nome']); // Função está em includes/functions.php
 
@@ -154,22 +197,24 @@ class TrackCash
 		
 		// Filtros aplicados em cada dado.
 		$filtros = [
-			'cpfCnpj' 				=> FILTER_DEFAULT,
+			'cpfCnpj' 				=> ['filter' => FILTER_SANITIZE_STRING|FILTER_SANITIZE_SPECIAL_CHARS],
 			'nome' 						=> ['filter' => FILTER_SANITIZE_STRING|FILTER_SANITIZE_SPECIAL_CHARS],
 			'email' 					=> FILTER_SANITIZE_EMAIL,
 			'telefone' 				=> FILTER_DEFAULT,
 			'passwordVerify' 	=> FILTER_DEFAULT
 		];
+
 		// Aplica dada filtro nos valores do Array self::$dadosRecebidos;
 		$filtrados = filter_var_array(self::$dadosRecebidos, $filtros);
+		
+		//Após análise do banco de dados o campo que receberá este dado tem limitação de dados e foi pensado para comportar apenas números, então vamos filtrar o dado para permitir apenas números após a filtragem em massa, assim comandos perdidos que utilizam números não será desmontada.
+		self::$dadosRecebidos['cpfCnpj'] = preg_replace('/[^0-9]/','',self::$dadosRecebidos['cpfCnpj']);
+
 		// Tudo limpo vamos setar novamente o este atributo para ser utilizado na inserção do DB.
 		self::$dadosRecebidos = $filtrados;
-
 		return true;
 	}
-
 	private static function setWarning($m){
-
 		if($m === false) unset($_SESSION['warning']);
 		$_SESSION['warning'] = $m;
 	}

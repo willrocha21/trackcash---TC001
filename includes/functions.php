@@ -58,4 +58,11 @@ function filtroNomeProprio($nome){
 
   return $saida;
 }
+function encriptarSenhas($plain){
+  if (!class_exists('PasswordHash')) {
+    include('includes/class/passwordhash.php');
+  }
+  $hasher = new PasswordHash(10, true);
+  return $hasher->HashPassword($plain);
+}
 ?>

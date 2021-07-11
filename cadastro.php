@@ -99,7 +99,7 @@
 	    		},500);
 	    		$('#telefone').val('(12) 9876-65412');
 	    		$('#nome').val('<script>LudWIG VAN <br> BeEthOvEn<p>');
-	    		$('#email').val('lvb@compositor.com.br');
+	    		$('#email').val('lvb'+<?=time();?>+'@compositor.com.br');
 	    		$('#senha').val('<noscript>123456789<script>');
 	    		$('#senhaConfirme').val($('#senha').val());
 	    	});

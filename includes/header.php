@@ -28,14 +28,16 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 		// Chama o método Cadastrar() sendo o primeiro parametro a rota dentro do método e o segundo com o array com os dados enviados.
 		$cadastrar = TrackCash::Cadastrar('NovoUsuario',$_POST);
 		
-		//dump($cadastrar);
+		if($cadastrar === true){
+			dump("Cadastrado realizado com sucesso! Redirecionar o cliente para o painel.");
+		}
 
 	}else{
 		// Se chegamos até aqui é porque algo de errado foi feito no formulário para quebrar o token.
 		// Neste caso podemos emitir um relatório de erro para salvar em um log, ou enviar todos os dados por e-mail para o administrador.
 		// Para não dar retorno positivo para o invasor vamos apenas redirecionar para a página de cadastro.
-		//header('Location:cadastro.php');
-		//exit();
+		header('Location:cadastro.php');
+		exit();
 	}
 }
 ?>
