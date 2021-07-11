@@ -36,8 +36,17 @@ function filtroNomeProprio($nome){
   // Créditos desta função.
   // https://www.codigofonte.com.br/codigos/formatacao-de-nomes-proprios-em-php
 
-  $nome = strtolower($nome); // Converter o nome todo para minúsculo
+  $nome = strtolower(trim($nome)); // Converter o nome todo para minúsculo e remover espaços antes ou após.
   $nome = explode(" ", $nome); // Separa o nome por espaços
+  $nome1 = array();
+  foreach($nome as $k => $v){
+    //vamos remover dados vazios por qualquer motivo, como espaços duplos
+    if(!empty($v)){
+      $nome1[] = $v;
+    }
+  }
+  $nome = $nome1;
+  $saida = '';
   for ($i=0; $i < count($nome); $i++) {
     // Tratar cada palavra do nome
     if ($nome[$i] == "de" or $nome[$i] == "da" or $nome[$i] == "e" or $nome[$i] == "dos" or $nome[$i] == "do") {
@@ -46,6 +55,7 @@ function filtroNomeProprio($nome){
       $saida .= ucfirst($nome[$i]).' '; // Se for um nome, mostrar a primeira letra maiúscula
     }
   }
+
   return $saida;
 }
 ?>

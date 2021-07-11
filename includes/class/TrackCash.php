@@ -5,7 +5,7 @@
  */
 class TrackCash
 {
-	
+	// Parâmetros esperados no formulário de cadastro teste
 	private static $parametrosValide = [
 		'cpfCnpj',
 		'nome',
@@ -16,6 +16,7 @@ class TrackCash
 		'passwordVerify',
 		'cadastrar'
 	];
+	// Atributo para os dados recebidos do formulário que serão filtrados ao longo da classe.
 	private static $dadosRecebidos = false;
 
 	public static function Cadastrar($action, array $dados){
@@ -36,6 +37,10 @@ class TrackCash
 						// Dados validados, agora vamos tratar os dados para inserção no DB
 						if(self::tratarDados() === true){
 							//Até aqui conseguimos saber que o usuário é honesto e está bem intensionado, MAS, vamos validar o dado para ver se não foi inserido dados maliciosos, scripts, sql inject.
+
+							// Vamos verificar se o cliente já não existe na base de dados.
+							$s = $DB->query("SHOW tables");
+							dump($s->fetchAll(PDO::FETCH_OBJ));
 						}
 					}else{ // Se algum dado errado vamos retornar false.
 						return false;
@@ -141,26 +146,26 @@ class TrackCash
 		foreach (self::$dadosRecebidos as $k => $v){
 			// Já vamos remover tags HTML.
 			self::$dadosRecebidos[$k] = strip_tags($v);
-			//Vamos formatar o nome para evitar JoAO FRANcisCo
-			if($k === 'nome'){
-				self::$dadosRecebidos[$k] = filtroNomeProprio($v); // Função está em includes/functions.php
-			}
+			//Vamos formatar o nome para evitar JoAO FRANcisCo ou emails com letras maíusculas
 		}
+		self::$dadosRecebidos['nome'] = filtroNomeProprio(self::$dadosRecebidos['nome']); // Função está em includes/functions.php
+
+		//não vamos filtrar o email nos casos de emails digitados como em maiúsculo ou qualquer outra deformidade dos dados pois a validação feita pelo HTML5 já é eficaz.
+		
 		// Filtros aplicados em cada dado.
 		$filtros = [
 			'cpfCnpj' 				=> FILTER_DEFAULT,
-			'nome' 						=> 
-				[	'filter' => FILTER_SANITIZE_STRING|FILTER_SANITIZE_SPECIAL_CHARS ],
+			'nome' 						=> ['filter' => FILTER_SANITIZE_STRING|FILTER_SANITIZE_SPECIAL_CHARS],
 			'email' 					=> FILTER_SANITIZE_EMAIL,
 			'telefone' 				=> FILTER_DEFAULT,
 			'passwordVerify' 	=> FILTER_DEFAULT
 		];
 		// Aplica dada filtro nos valores do Array self::$dadosRecebidos;
 		$filtrados = filter_var_array(self::$dadosRecebidos, $filtros);
+		// Tudo limpo vamos setar novamente o este atributo para ser utilizado na inserção do DB.
+		self::$dadosRecebidos = $filtrados;
 
-
-		dump($filtrados);
-		//dump(self::$dadosRecebidos);
+		return true;
 	}
 
 	private static function setWarning($m){
